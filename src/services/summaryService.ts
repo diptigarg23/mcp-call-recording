@@ -31,7 +31,7 @@ CRITICAL INSTRUCTION: ONLY extract information that is EXPLICITLY stated in the 
 Format your response EXACTLY as follows:
 
 CALL TYPE: [guidance session/demo/onboarding/sales call/technical review/etc]
-PARTICIPANTS: [Name (Role), Name (Role), ...] - Extract names and roles exactly as stated
+PARTICIPANTS: [List ALL participants who spoke in the call: Name (Role), Name (Role), ...] - Include every person who spoke, extract names and roles exactly as stated
 COMPANY/COMPANIES: [Only list companies explicitly mentioned as where participants work. If not stated, write "Unknown"]
 DATE: [Extract if mentioned in transcript, otherwise write "Unknown"]
 DURATION: [Extract if mentioned, otherwise write "Unknown"]
@@ -53,6 +53,8 @@ DECISIONS MADE:
 - [Decision 2]
 
 Guidelines:
+- IMPORTANT: Follow the structured format above EXACTLY, even for long transcripts
+- PARTICIPANTS: List EVERY person who spoke in the call - do not omit anyone
 - Use full names consistently (e.g., "Brian Hopkins" not "Brian" or "Hopkins")
 - Extract roles exactly as mentioned in the transcript (e.g., "CMO", "VP of Engineering")
 - For COMPANY/COMPANIES: ONLY include if the transcript explicitly states where someone works (e.g., "John from Acme Corp"). If roles are mentioned without companies, write "Unknown"
@@ -77,7 +79,7 @@ ${fullTranscriptText}`;
           stream: false,
           options: {
             temperature: 0.3, // Lower temperature for more consistent output
-            num_predict: 2000, // Max tokens to generate
+            num_predict: 4000, // Max tokens to generate (increased for longer calls)
           },
         }),
       });
