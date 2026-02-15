@@ -5,6 +5,10 @@ An MCP (Model Context Protocol) server that provides semantic search over VTT tr
 ## Architecture Diagram (generated using Gemini Nano Banana)
 <img width="954" height="906" alt="image" src="https://github.com/user-attachments/assets/a2bee971-9b3e-4a22-b1d7-15ce1136b9f8" />
 
+## Data Flow 
+
+This is improved version of data flow after we identified improvements we can make at the embedding levels.
+<img width="736" height="427" alt="image" src="https://github.com/user-attachments/assets/abd7d122-c602-4bed-a89f-1b239432525b" />
 
 ## Features
 
