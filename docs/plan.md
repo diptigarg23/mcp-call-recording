@@ -179,9 +179,8 @@ Add to `.env`:
 **Supported queries** (single-transcript):
 
 - "Summarize Brian Hopkins call with Acme"
-- "What happened in the Capital One call?"
-- "Give me an overview of the Bank of America sales call"
-- "What were the action items from the Bank of America call?"
+- "What happened in the last CSM check-in call with Capital One?"
+- "What were the action items from the Bank of America sales call"
 - "What decisions were made in the Capital One call?"
 - "Who participated in the Acme call?"
 

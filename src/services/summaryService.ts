@@ -26,13 +26,15 @@ export class SummaryService {
       // Build the prompt with the exact format specified
       const prompt = `Analyze this call transcript and create a structured summary.
 
+CRITICAL INSTRUCTION: ONLY extract information that is EXPLICITLY stated in the transcript. DO NOT invent, assume, or fabricate ANY information. If information is not mentioned, write "Unknown" or leave blank as specified.
+
 Format your response EXACTLY as follows:
 
 CALL TYPE: [guidance session/demo/onboarding/sales call/technical review/etc]
-PARTICIPANTS: [Name (Role/Company), Name (Role/Company), ...]
-COMPANY/COMPANIES: [Companies where the call participants work - NOT just companies mentioned]
-DATE: [Extract if mentioned in transcript, otherwise leave blank]
-DURATION: [Extract if mentioned, otherwise leave blank]
+PARTICIPANTS: [Name (Role), Name (Role), ...] - Extract names and roles exactly as stated
+COMPANY/COMPANIES: [Only list companies explicitly mentioned as where participants work. If not stated, write "Unknown"]
+DATE: [Extract if mentioned in transcript, otherwise write "Unknown"]
+DURATION: [Extract if mentioned, otherwise write "Unknown"]
 
 SUMMARY:
 [2-3 well-organized paragraphs covering the main discussion points. Organize by topic/theme, not chronologically. Include specific technical details, decisions made, and context.]
@@ -52,10 +54,11 @@ DECISIONS MADE:
 
 Guidelines:
 - Use full names consistently (e.g., "Brian Hopkins" not "Brian" or "Hopkins")
-- Include company affiliations in parentheses for clarity
-- COMPANY/COMPANIES should list only the companies where call participants work, NOT companies just mentioned in discussion
+- Extract roles exactly as mentioned in the transcript (e.g., "CMO", "VP of Engineering")
+- For COMPANY/COMPANIES: ONLY include if the transcript explicitly states where someone works (e.g., "John from Acme Corp"). If roles are mentioned without companies, write "Unknown"
 - Be specific about technical topics (don't just say "API discussion", say "OAuth 2.0 authentication implementation")
 - Preserve important details like timelines, numbers, specific product names
+- DO NOT make up or infer information that is not explicitly in the transcript
 
 Transcript:
 ${fullTranscriptText}`;
