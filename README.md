@@ -11,9 +11,7 @@ An MCP (Model Context Protocol) server that provides semantic search over VTT tr
 - **Metadata Extraction**: Automatically extracts client names, call dates, and participants from filenames and VTT content
 - **Single Tool Interface**: Simple `query_transcripts` tool that handles all queries (pure semantic search; metadata is used for display, not filtering)
 
-## Architecture
-
-The server uses:
+## The server uses
 
 - **Chroma**: Vector database; the Node.js client connects to a **ChromaDB server** running at `http://localhost:8000`. Persisted data is stored in a directory you configure when starting the Chroma server (see [CHROMADB_SETUP.md](CHROMADB_SETUP.md)).
 - **@xenova/transformers**: Open-source embeddings using Hugging Face models (runs locally, no API needed)
