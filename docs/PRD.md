@@ -362,11 +362,13 @@ An AI-powered MCP server that enables business stakeholders to extract insights 
 
 ### Related Documents
 - [Technical Architecture](architecture.md)
-- [Ollama Setup Guide](OLLAMA_SETUP.md)
+- [OpenAI Migration Guide](OPENAI_MIGRATION.md)
+- [Migration Complete Summary](MIGRATION_COMPLETE.md)
+- [Environment Setup](../ENV_SETUP.md)
 - [Quick Start Guide](QUICK_START.md)
-- [Implementation Summary](IMPLEMENTATION_SUMMARY.md)
 
 ### Revision History
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | 2026-02-15 | Product Team | Initial PRD |
+| 1.1 | 2026-02-15 | Product Team | Updated for OpenAI migration |

@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import { MCPServer } from './server.js';
 import { EmbeddingService } from './services/embeddingService.js';
 import { SummaryService } from './services/summaryService.js';
@@ -6,6 +6,15 @@ import { VectorDatabase } from './services/vectorDb.js';
 import { FileWatcher } from './services/fileWatcher.js';
 import { Indexer } from './services/indexer.js';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get the directory of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from the project root (one level up from dist/)
+const envPath = path.resolve(__dirname, '..', '.env');
+dotenv.config({ path: envPath });
 
 async function main() {
   // Load environment variables
