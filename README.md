@@ -1,4 +1,4 @@
-<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/7597b137-39bd-425c-8fff-bea66f644ff4" /># MCP Call Recording Server
+# MCP Call Recording Server
 
 An MCP (Model Context Protocol) server that provides semantic search over VTT transcript files. This server enables business stakeholders to query client call transcripts using natural language through Claude Desktop and Microsoft Copilot 365 Studio.
 
