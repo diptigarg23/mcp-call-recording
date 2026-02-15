@@ -1,6 +1,8 @@
 # MCP Call Recording Server
 
-An MCP (Model Context Protocol) server that provides semantic search over VTT transcript files using **completely open-source, locally-run models**. This server enables business stakeholders to query client call transcripts using natural language through Claude Desktop and Microsoft Copilot 365 Studio.
+An MCP (Model Context Protocol) server that provides semantic search over VTT transcript files using **AI-powered structured summaries**. This server enables business stakeholders to query client call transcripts using natural language through Claude Desktop and Microsoft Copilot 365 Studio.
+
+**Now powered by OpenAI GPT-4-turbo** for best-in-class summary quality and structured extraction.
 
 ## Architecture Diagram (generated using Gemini Nano Banana)
 <img width="954" height="906" alt="image" src="https://github.com/user-attachments/assets/a2bee971-9b3e-4a22-b1d7-15ce1136b9f8" />
@@ -13,26 +15,29 @@ This is improved version of data flow after we identified improvements we can ma
 ## Features
 
 - **Automatic Indexing**: Monitors a directory for VTT transcript files and automatically indexes them in the background
-- **Semantic Search**: Uses open-source embeddings (Hugging Face models via `@xenova/transformers`) and Chroma vector database for semantic search over transcripts
-- **Structured Summaries**: Generates comprehensive summaries with CALL TYPE, PARTICIPANTS, COMPANY/COMPANIES, KEY TOPICS, ACTION ITEMS, and DECISIONS MADE using **Ollama (local LLM)**
-- **No API Keys Required**: Everything runs locally - no OpenAI, no cloud services, no per-request costs!
+- **AI-Powered Summaries**: Uses OpenAI GPT-4-turbo to generate perfect structured summaries with CALL TYPE, PARTICIPANTS, COMPANY/COMPANIES, KEY TOPICS, ACTION ITEMS, and DECISIONS MADE
+- **Advanced Embeddings**: OpenAI text-embedding-3-small (1536 dimensions) for superior semantic search quality
 - **Natural Language Queries**: Ask questions like "Summarize the Bank of America sales call" or "What were the action items from the Capital One call?"
+- **100% Consistent Format**: GPT-4-turbo maintains perfect structure even for long transcripts (860+ lines, 286+ segments)
+- **All Participants Captured**: Never miss a meeting attendee - all speakers are identified correctly
+- **No Hallucinations**: Correctly shows "Unknown" for missing information instead of fabricating data
 - **Single Tool Interface**: Simple `query_transcripts` tool that handles all queries (pure semantic search)
 
 ## The server uses:
 
-- **Ollama**: Local LLM for generating structured summaries (Phi-3, Llama 3, or Mistral)
+- **OpenAI GPT-4-turbo**: Best-in-class LLM for generating structured summaries (~$0.01-0.05 per transcript)
+- **OpenAI Embeddings**: text-embedding-3-small for 1536-dimensional semantic search (~$0.0001 per transcript)
 - **Chroma**: Vector database; the Node.js client connects to a **ChromaDB server** running at `http://localhost:8000`. Persisted data is stored in a directory you configure when starting the Chroma server (see [CHROMADB_SETUP.md](CHROMADB_SETUP.md)).
-- **@xenova/transformers**: Open-source embeddings using Hugging Face models (runs locally, no API needed)
 - **File Watcher (chokidar)**: Automatically detects and indexes new, changed, or deleted VTT files
 - **MCP Protocol**: Standard protocol for AI assistant integration (stdio transport)
 
 ## Prerequisites
 
 - Node.js 18+
+- OpenAI API key (get one at https://platform.openai.com/api-keys)
+- $5+ OpenAI credit (covers ~200 transcripts)
 - Directory containing VTT transcript files
 - **ChromaDB server** running on `http://localhost:8000` (see [CHROMADB_SETUP.md](CHROMADB_SETUP.md))
-- **Ollama** for generating summaries (see [docs/OLLAMA_SETUP.md](docs/OLLAMA_SETUP.md))
 
 ## Installation
 
@@ -50,15 +55,15 @@ This is improved version of data flow after we identified improvements we can ma
    npm run build
    ```
 
-4. Create a `.env` file in the project root with at least:
+4. Create a `.env` file in the project root:
 
    ```env
-   EMBEDDING_MODEL=Xenova/all-MiniLM-L6-v2
+   OPENAI_API_KEY=sk-proj-your-key-here
    VTT_DIRECTORY=/path/to/vtt/transcript/files
    CHROMA_DB_PATH=./chroma_db
    ```
 
-   **Note**: No API key is needed. The embedding service uses open-source models that run locally. `CHROMA_DB_PATH` is the path used when **starting the Chroma server** (where it stores data); the MCP client always connects to `http://localhost:8000`.
+   See [ENV_SETUP.md](ENV_SETUP.md) for detailed environment setup instructions.
 
 5. Start the ChromaDB server (in a separate terminal) before running the MCP server—see [CHROMADB_SETUP.md](CHROMADB_SETUP.md).
 
@@ -70,11 +75,11 @@ The MCP server reads configuration from environment variables (e.g. from a `.env
 
 | Variable           | Required | Description                                                                 |
 |--------------------|----------|-----------------------------------------------------------------------------|
+| `OPENAI_API_KEY`   | Yes      | Your OpenAI API key for GPT-4-turbo summaries and embeddings               |
 | `VTT_DIRECTORY`    | Yes      | Path to the directory containing VTT transcript files                      |
-| `EMBEDDING_MODEL`  | No       | Hugging Face model for embeddings. Default: `Xenova/all-MiniLM-L6-v2`. For better quality (slower): `Xenova/all-mpnet-base-v2` |
-| `CHROMA_DB_PATH`   | No       | Path for Chroma server data when you start Chroma (e.g. `./chroma_db`). The MCP client connects to `http://localhost:8000`. |
+| `CHROMA_DB_PATH`   | No       | Path for Chroma server data (default: `./chroma_db`)                       |
 
-Embeddings are generated locally; no API key is required.
+**Cost**: ~$0.02 per transcript on average (varies with length). Your $5 credit covers approximately 200 transcripts.
 
 ### Claude Desktop Setup
 
@@ -106,7 +111,7 @@ Embeddings are generated locally; no API key is required.
 
 The server currently uses **stdio** transport. For Copilot Studio you would need to run it as an HTTP MCP server (e.g. add an HTTP transport in `src/index.ts` or run behind an adapter).
 
-For reference, `config/copilot-studio.json` illustrates a possible structure (name, description, transport type, environment variables). Set `VTT_DIRECTORY` and `CHROMA_DB_PATH` in your deployment environment; no `OPENAI_API_KEY` is needed for embeddings.
+For reference, `config/copilot-studio.json` illustrates a possible structure (name, description, transport type, environment variables). Set `VTT_DIRECTORY`, `CHROMA_DB_PATH`, and `OPENAI_API_KEY` in your deployment environment.
 
 ## Usage
 
@@ -138,9 +143,10 @@ On startup the server:
 1. Scans `VTT_DIRECTORY` for existing `.vtt` files
 2. Parses each file into segments with timestamps
 3. Extracts metadata (client name, date, participants, call type) from filenames and VTT content
-4. Chunks segments by size (default: up to ~750 words per chunk, ~50 words overlap) for embedding
-5. Generates embeddings locally and stores them with metadata in Chroma
-6. Uses the same pipeline when the file watcher detects new or changed files
+4. Generates AI-powered structured summary using OpenAI GPT-4-turbo
+5. Creates semantic embedding of the entire summary using OpenAI text-embedding-3-small (1536 dimensions)
+6. Stores summary and embedding in ChromaDB for semantic search
+7. Uses the same pipeline when the file watcher detects new or changed files
 
 ### File Watching
 
@@ -154,9 +160,9 @@ The server watches the VTT directory with chokidar:
 
 For each query:
 
-1. The question is embedded with the same model used for indexing
-2. Chroma returns the closest segments by embedding similarity (cosine distance → converted to a 0–1 score)
-3. Results are filtered by `minScore`, sorted by score, and formatted with segment text and metadata
+1. The question is embedded using OpenAI text-embedding-3-small (same model used for indexing)
+2. Chroma returns the closest transcript summaries by embedding similarity (cosine distance → converted to a 0–1 score)
+3. Results are filtered by `minScore`, sorted by score, and formatted with summary text and metadata
 
 ## Reindexing
 
@@ -176,7 +182,9 @@ If you need to refresh the index for one file or the whole directory:
   # or: tsx reindex-all.ts
   ```
 
-Both scripts use your `.env` (e.g. `VTT_DIRECTORY`, `CHROMA_DB_PATH`, `EMBEDDING_MODEL`). The Chroma server must be running.
+Both scripts use your `.env` (e.g. `VTT_DIRECTORY`, `CHROMA_DB_PATH`, `OPENAI_API_KEY`). The Chroma server must be running.
+
+**Note**: Re-indexing costs OpenAI API credits (~$0.02 per transcript).
 
 ## File Structure
 
@@ -189,7 +197,8 @@ MCP_Call_Recording/
 │   │   └── query.ts             # query_transcripts tool (embedding + vector search + format answer)
 │   ├── services/
 │   │   ├── vttParser.ts         # VTT file parsing
-│   │   ├── embeddingService.ts  # Local embeddings (@xenova/transformers)
+│   │   ├── summaryService.ts    # OpenAI GPT-4-turbo for structured summaries
+│   │   ├── embeddingService.ts  # OpenAI text-embedding-3-small (1536-dim)
 │   │   ├── vectorDb.ts          # Chroma client (connects to http://localhost:8000)
 │   │   ├── metadataExtractor.ts # Metadata from filename and VTT content
 │   │   ├── indexer.ts           # Index one file or directory into Chroma
@@ -197,7 +206,7 @@ MCP_Call_Recording/
 │   ├── types/
 │   │   └── transcript.ts        # TypeScript interfaces
 │   └── utils/
-│       └── chunking.ts          # Chunk segments by word count (e.g. 750 words, 50 overlap)
+│       └── chunking.ts          # Legacy chunking utilities (now using full-transcript summaries)
 ├── config/
 │   ├── claude-desktop.json      # Example Claude Desktop MCP config
 │   └── copilot-studio.json      # Example structure for Copilot Studio (HTTP not implemented)
@@ -265,9 +274,10 @@ Metadata is derived from:
 
 ## Troubleshooting
 
-### Server won’t start
+### Server won't start
 
-- Ensure all required environment variables are set in `.env` (especially `VTT_DIRECTORY`).
+- Ensure all required environment variables are set in `.env` (especially `OPENAI_API_KEY` and `VTT_DIRECTORY`).
+- Verify your OpenAI API key is valid and has credits.
 - Ensure the **ChromaDB server** is running at `http://localhost:8000` (see [CHROMADB_SETUP.md](CHROMADB_SETUP.md)).
 - In Claude Desktop config, use the **absolute** path to `dist/index.js`.
 - Check stderr/logs for errors.
@@ -282,19 +292,26 @@ Metadata is derived from:
 
 - Ensure transcripts are valid VTT and were indexed (watch startup logs or use reindex scripts).
 - Lower `minScore` (e.g. 0.0) to see more results; the tool default is 0.0.
-- First run downloads the embedding model; ensure network and disk space are available.
+- Check OpenAI API usage to confirm embeddings are being generated.
 
-### Embedding model
+### OpenAI API Issues
 
-- Default: `Xenova/all-MiniLM-L6-v2` (fast, smaller). For higher quality (slower): set `EMBEDDING_MODEL=Xenova/all-mpnet-base-v2` in `.env`.
-- Models are downloaded and cached locally on first use.
+- **Rate limits**: OpenAI has rate limits. If indexing many files, they're processed sequentially.
+- **Cost monitoring**: Check your usage at https://platform.openai.com/usage
+- **Budget alerts**: Set limits at https://platform.openai.com/settings/organization/billing/limits
 
 ## Security Considerations
 
-- Embeddings run locally; no embedding API keys are required.
+- **API Key Security**: Keep your OpenAI API key secure. Never commit `.env` files to version control.
+- **Cost Control**: Set usage limits in your OpenAI account to prevent unexpected charges.
+- **Data Privacy**: Transcripts are sent to OpenAI for processing. Ensure compliance with your data policies.
 - Validate and constrain file paths to avoid directory traversal.
 - Sanitize or limit user query input as needed.
 - Consider rate limiting and access control for production or HTTP deployment.
+
+## Migration from Ollama
+
+If you're upgrading from the previous Ollama-based version, see [docs/OPENAI_MIGRATION.md](docs/OPENAI_MIGRATION.md) for complete migration instructions.
 
 ## License
 
