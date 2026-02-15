@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { MCPServer } from './server.js';
 import { EmbeddingService } from './services/embeddingService.js';
+import { SummaryService } from './services/summaryService.js';
 import { VectorDatabase } from './services/vectorDb.js';
 import { FileWatcher } from './services/fileWatcher.js';
 import { Indexer } from './services/indexer.js';
@@ -11,20 +12,30 @@ async function main() {
   const embeddingModel = process.env.EMBEDDING_MODEL || 'Xenova/all-MiniLM-L6-v2';
   const vttDirectory = process.env.VTT_DIRECTORY;
   const chromaDbPath = process.env.CHROMA_DB_PATH || './chroma_db';
+  const ollamaBaseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+  const ollamaModel = process.env.OLLAMA_MODEL || 'phi3';
   
   if (!vttDirectory) {
     throw new Error('VTT_DIRECTORY environment variable is required');
   }
   
+  console.error('Starting MCP Call Recording Server...');
+  console.error(`VTT Directory: ${vttDirectory}`);
+  console.error(`ChromaDB Path: ${chromaDbPath}`);
+  console.error(`Embedding Model: ${embeddingModel}`);
+  console.error(`Ollama URL: ${ollamaBaseUrl}`);
+  console.error(`Ollama Model: ${ollamaModel}`);
+  
   // Initialize services
   const embeddingService = new EmbeddingService(embeddingModel);
+  const summaryService = new SummaryService(ollamaBaseUrl, ollamaModel);
   const vectorDb = new VectorDatabase(chromaDbPath);
   
   // Initialize vector database
   await vectorDb.initialize();
   
-  // Initialize indexer
-  const indexer = new Indexer(embeddingService, vectorDb);
+  // Initialize indexer with summary service
+  const indexer = new Indexer(embeddingService, summaryService, vectorDb);
   
   // Index existing files on startup
   console.error('Indexing existing VTT files...');
@@ -58,9 +69,9 @@ async function main() {
   fileWatcher.on('fileDeleted', async (filePath) => {
     console.error(`File deleted: ${filePath}`);
     try {
-      await vectorDb.deleteFileSegments(filePath);
+      await vectorDb.deleteSummary(filePath);
     } catch (error) {
-      console.error(`Error deleting segments for file ${filePath}:`, error);
+      console.error(`Error deleting summary for file ${filePath}:`, error);
     }
   });
   

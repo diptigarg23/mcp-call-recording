@@ -35,3 +35,10 @@ export interface IndexedSegment {
     speaker?: string;
   };
 }
+
+export interface TranscriptSummary {
+  id: string;
+  summaryText: string;  // Complete formatted summary (CALL TYPE, PARTICIPANTS, SUMMARY, KEY TOPICS, ACTION ITEMS, DECISIONS MADE)
+  embedding: number[];   // Embedding of the ENTIRE summaryText
+  metadata: TranscriptMetadata; // File metadata (filePath, fileName, callDate from filename, etc.)
+}

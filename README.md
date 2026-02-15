@@ -1,6 +1,6 @@
 # MCP Call Recording Server
 
-An MCP (Model Context Protocol) server that provides semantic search over VTT transcript files. This server enables business stakeholders to query client call transcripts using natural language through Claude Desktop and Microsoft Copilot 365 Studio.
+An MCP (Model Context Protocol) server that provides semantic search over VTT transcript files using **completely open-source, locally-run models**. This server enables business stakeholders to query client call transcripts using natural language through Claude Desktop and Microsoft Copilot 365 Studio.
 
 ## Architecture Diagram (generated using Gemini Nano Banana)
 <img width="954" height="906" alt="image" src="https://github.com/user-attachments/assets/a2bee971-9b3e-4a22-b1d7-15ce1136b9f8" />
@@ -14,13 +14,14 @@ This is improved version of data flow after we identified improvements we can ma
 
 - **Automatic Indexing**: Monitors a directory for VTT transcript files and automatically indexes them in the background
 - **Semantic Search**: Uses open-source embeddings (Hugging Face models via `@xenova/transformers`) and Chroma vector database for semantic search over transcripts
-- **No API Keys Required**: All embeddings are generated locally using open-source models
-- **Natural Language Queries**: Ask questions like "identify the top risk identified in last client call with Bank of America with Sales"
-- **Metadata Extraction**: Automatically extracts client names, call dates, and participants from filenames and VTT content
-- **Single Tool Interface**: Simple `query_transcripts` tool that handles all queries (pure semantic search; metadata is used for display, not filtering)
+- **Structured Summaries**: Generates comprehensive summaries with CALL TYPE, PARTICIPANTS, COMPANY/COMPANIES, KEY TOPICS, ACTION ITEMS, and DECISIONS MADE using **Ollama (local LLM)**
+- **No API Keys Required**: Everything runs locally - no OpenAI, no cloud services, no per-request costs!
+- **Natural Language Queries**: Ask questions like "Summarize the Bank of America sales call" or "What were the action items from the Capital One call?"
+- **Single Tool Interface**: Simple `query_transcripts` tool that handles all queries (pure semantic search)
 
-## The server uses
+## The server uses:
 
+- **Ollama**: Local LLM for generating structured summaries (Phi-3, Llama 3, or Mistral)
 - **Chroma**: Vector database; the Node.js client connects to a **ChromaDB server** running at `http://localhost:8000`. Persisted data is stored in a directory you configure when starting the Chroma server (see [CHROMADB_SETUP.md](CHROMADB_SETUP.md)).
 - **@xenova/transformers**: Open-source embeddings using Hugging Face models (runs locally, no API needed)
 - **File Watcher (chokidar)**: Automatically detects and indexes new, changed, or deleted VTT files
@@ -31,6 +32,7 @@ This is improved version of data flow after we identified improvements we can ma
 - Node.js 18+
 - Directory containing VTT transcript files
 - **ChromaDB server** running on `http://localhost:8000` (see [CHROMADB_SETUP.md](CHROMADB_SETUP.md))
+- **Ollama** for generating summaries (see [docs/OLLAMA_SETUP.md](docs/OLLAMA_SETUP.md))
 
 ## Installation
 

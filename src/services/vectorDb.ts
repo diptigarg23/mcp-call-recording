@@ -1,11 +1,13 @@
 import { ChromaClient } from 'chromadb';
-import { IndexedSegment } from '../types/transcript.js';
+import { IndexedSegment, TranscriptSummary } from '../types/transcript.js';
 import path from 'path';
 
 export class VectorDatabase {
   private client: ChromaClient;
   private collectionName: string;
+  private summaryCollectionName: string;
   private collection: any; // Chroma collection type
+  private summaryCollection: any; // Chroma collection for summaries
   
   constructor(dbPath: string, collectionName: string = 'transcripts') {
     // ChromaDB Node.js client requires a running ChromaDB server
@@ -16,6 +18,7 @@ export class VectorDatabase {
       path: 'http://localhost:8000',
     });
     this.collectionName = collectionName;
+    this.summaryCollectionName = 'transcript_summaries';
   }
   
   /**
@@ -27,6 +30,12 @@ export class VectorDatabase {
       this.collection = await this.client.getOrCreateCollection({
         name: this.collectionName,
         metadata: { description: 'Call transcript embeddings' },
+      });
+      
+      // Initialize summary collection
+      this.summaryCollection = await this.client.getOrCreateCollection({
+        name: this.summaryCollectionName,
+        metadata: { description: 'Call transcript summaries' },
       });
     } catch (error) {
       console.error('Error initializing collection:', error);
@@ -221,6 +230,129 @@ export class VectorDatabase {
     } catch (error) {
       console.error('Error getting collection stats:', error);
       return { count: 0 };
+    }
+  }
+  
+  /**
+   * Add a transcript summary to the vector database
+   */
+  async addTranscriptSummary(summary: TranscriptSummary): Promise<void> {
+    try {
+      const metadata = {
+        filePath: summary.metadata.filePath,
+        fileName: summary.metadata.fileName,
+        clientName: summary.metadata.clientName || '',
+        callDate: summary.metadata.callDate?.toISOString() || '',
+        participants: summary.metadata.participants?.join(', ') || '',
+        callType: summary.metadata.callType || '',
+      };
+      
+      await this.summaryCollection.add({
+        ids: [summary.id],
+        embeddings: [summary.embedding],
+        documents: [summary.summaryText],
+        metadatas: [metadata],
+      });
+      
+      console.error(`[VectorDB] Added transcript summary: ${summary.id}`);
+    } catch (error) {
+      console.error('Error adding transcript summary to vector database:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Search for similar transcript summaries
+   */
+  async searchSummaries(
+    queryEmbedding: number[],
+    limit: number = 5,
+    minScore: number = 0.0
+  ): Promise<Array<TranscriptSummary>> {
+    try {
+      const queryOptions: any = {
+        queryEmbeddings: [queryEmbedding],
+        nResults: limit,
+      };
+      
+      const results = await this.summaryCollection.query(queryOptions);
+      
+      console.error(`[VectorDB] Summary search returned ${results.ids?.[0]?.length || 0} results`);
+      
+      const summaries: TranscriptSummary[] = [];
+      
+      if (results.ids && results.ids[0]) {
+        for (let i = 0; i < results.ids[0].length; i++) {
+          const id = results.ids[0][i];
+          const distances = results.distances?.[0]?.[i];
+          const document = results.documents?.[0]?.[i] || '';
+          const metadata = results.metadatas?.[0]?.[i] || {};
+          
+          // Convert distance to similarity score
+          const rawDistance = distances !== undefined ? distances : 2;
+          const score = Math.max(0, Math.min(1, 1 - rawDistance));
+          
+          console.error(`[VectorDB] Summary result ${i + 1}: score=${score.toFixed(4)}, file=${metadata.fileName}`);
+          
+          if (score >= minScore) {
+            summaries.push({
+              id,
+              summaryText: document,
+              embedding: [], // Don't need to return the embedding
+              metadata: {
+                filePath: metadata.filePath || '',
+                fileName: metadata.fileName || '',
+                clientName: metadata.clientName || undefined,
+                callDate: metadata.callDate ? new Date(metadata.callDate) : undefined,
+                participants: metadata.participants ? metadata.participants.split(', ').filter((p: string) => p) : undefined,
+                callType: metadata.callType || undefined,
+              },
+            });
+          }
+        }
+      }
+      
+      return summaries;
+    } catch (error) {
+      console.error('Error searching transcript summaries:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Check if a transcript summary has been indexed
+   */
+  async isSummaryIndexed(filePath: string): Promise<boolean> {
+    try {
+      const results = await this.summaryCollection.get({
+        where: { filePath },
+        limit: 1,
+      });
+      return results.ids && results.ids.length > 0;
+    } catch (error) {
+      console.error('Error checking if summary is indexed:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * Delete a transcript summary (useful for re-indexing)
+   */
+  async deleteSummary(filePath: string): Promise<void> {
+    try {
+      const results = await this.summaryCollection.get({
+        where: { filePath },
+      });
+      
+      if (results.ids && results.ids.length > 0) {
+        await this.summaryCollection.delete({
+          ids: results.ids,
+        });
+        console.error(`[VectorDB] Deleted summary for: ${filePath}`);
+      }
+    } catch (error) {
+      console.error('Error deleting transcript summary:', error);
+      throw error;
     }
   }
 }

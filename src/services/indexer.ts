@@ -3,25 +3,27 @@ import { VTTParser } from './vttParser.js';
 import { MetadataExtractor } from './metadataExtractor.js';
 import { EmbeddingService } from './embeddingService.js';
 import { VectorDatabase } from './vectorDb.js';
-import { chunkTranscriptSegments } from '../utils/chunking.js';
-import { IndexedSegment } from '../types/transcript.js';
-import { createHash } from 'crypto';
+import { SummaryService } from './summaryService.js';
+import { TranscriptSummary } from '../types/transcript.js';
 import path from 'path';
 
 export class Indexer {
   private vttParser: VTTParser;
   private metadataExtractor: MetadataExtractor;
   private embeddingService: EmbeddingService;
+  private summaryService: SummaryService;
   private vectorDb: VectorDatabase;
   private indexingInProgress: Set<string> = new Set();
   
   constructor(
     embeddingService: EmbeddingService,
+    summaryService: SummaryService,
     vectorDb: VectorDatabase
   ) {
     this.vttParser = new VTTParser();
     this.metadataExtractor = new MetadataExtractor();
     this.embeddingService = embeddingService;
+    this.summaryService = summaryService;
     this.vectorDb = vectorDb;
   }
   
@@ -42,14 +44,14 @@ export class Indexer {
     
     // Check if already indexed (unless force reindex)
     if (!forceReindex) {
-      const isIndexed = await this.vectorDb.isFileIndexed(filePath);
+      const isIndexed = await this.vectorDb.isSummaryIndexed(filePath);
       if (isIndexed) {
         console.error(`File already indexed: ${filePath}`);
         return;
       }
     } else {
-      // Delete existing segments before re-indexing
-      await this.vectorDb.deleteFileSegments(filePath);
+      // Delete existing summary before re-indexing
+      await this.vectorDb.deleteSummary(filePath);
     }
     
     this.indexingInProgress.add(filePath);
@@ -75,53 +77,34 @@ export class Indexer {
         ...extractedMetadata,
       };
       
-      // Chunk segments
-      const chunks = chunkTranscriptSegments(parsed.segments);
-      console.error(`[DEBUG] Parsed ${parsed.segments.length} segments, created ${chunks.length} chunks`);
-      if (chunks.length > 0) {
-        console.error(`[DEBUG] First chunk preview: ${chunks[0].text.substring(0, 100)}...`);
-        console.error(`[DEBUG] First chunk word count: ${chunks[0].text.split(/\s+/).length}`);
-      }
+      // Update parsed transcript metadata
+      parsed.metadata = metadata;
       
-      // Generate embeddings for chunks
-      const chunkTexts = chunks.map(chunk => chunk.text);
-      console.error(`[DEBUG] Generating embeddings for ${chunkTexts.length} chunks...`);
-      const embeddings = await this.embeddingService.generateEmbeddings(chunkTexts);
+      console.error(`[Indexer] Generating structured summary using OpenAI...`);
       
-      // Create indexed segments
-      console.error(`[DEBUG] Created ${embeddings.length} embeddings, preparing to store in ChromaDB...`);
-      const indexedSegments: IndexedSegment[] = chunks.map((chunk, index) => {
-        const segmentId = this.generateSegmentId(filePath, chunk.startTime, chunk.endTime);
-        
-        // DEBUG: Check embedding normalization
-        const embedding = embeddings[index];
-        const norm = Math.sqrt(embedding.reduce((sum, val) => sum + val * val, 0));
-        if (index === 0) {
-          console.error(`[DEBUG] First embedding norm: ${norm.toFixed(4)} (should be ~1.0)`);
-        }
-        
-        return {
-          id: segmentId,
-          text: chunk.text,
-          embedding: embedding,
-          metadata: {
-            filePath: metadata.filePath,
-            fileName: metadata.fileName,
-            clientName: metadata.clientName,
-            callDate: metadata.callDate?.toISOString(),
-            participants: metadata.participants?.join(', '),
-            callType: metadata.callType,
-            startTime: chunk.startTime,
-            endTime: chunk.endTime,
-            speaker: chunk.segments[0]?.speaker,
-          },
-        };
-      });
+      // Generate structured summary using OpenAI
+      const summaryText = await this.summaryService.generateSummary(parsed);
+      
+      console.error(`[Indexer] Summary generated (${summaryText.length} characters)`);
+      console.error(`[Indexer] Generating embedding for summary...`);
+      
+      // Generate embedding for the summary
+      const summaryEmbedding = await this.embeddingService.generateEmbedding(summaryText);
+      
+      console.error(`[Indexer] Summary embedding generated (dimension: ${summaryEmbedding.length})`);
+      
+      // Create transcript summary object
+      const transcriptSummary: TranscriptSummary = {
+        id: this.summaryService.generateSummaryId(filePath),
+        summaryText: summaryText,
+        embedding: summaryEmbedding,
+        metadata: metadata,
+      };
       
       // Store in vector database
-      await this.vectorDb.addSegments(indexedSegments);
+      await this.vectorDb.addTranscriptSummary(transcriptSummary);
       
-      console.error(`Successfully indexed ${indexedSegments.length} segments from ${filePath}`);
+      console.error(`Successfully indexed transcript summary for ${filePath}`);
     } catch (error) {
       console.error(`Error indexing file ${filePath}:`, error);
       throw error;
@@ -155,15 +138,5 @@ export class Indexer {
       console.error(`Error reading directory ${directoryPath}:`, error);
       throw error;
     }
-  }
-  
-  /**
-   * Generate a unique segment ID
-   */
-  private generateSegmentId(filePath: string, startTime: number, endTime: number): string {
-    const hash = createHash('md5')
-      .update(`${filePath}:${startTime}:${endTime}`)
-      .digest('hex');
-    return hash.substring(0, 16);
   }
 }
