@@ -3,7 +3,7 @@
 An MCP (Model Context Protocol) server that provides semantic search over VTT transcript files. This server enables business stakeholders to query client call transcripts using natural language through Claude Desktop and Microsoft Copilot 365 Studio.
 
 ## Architecture Diagram (generated using Gemini Nano Banana)
-<img width="971" height="937" alt="image" src="https://github.com/user-attachments/assets/cee5a942-9e6d-46a0-8bd9-b36619335ee2" />
+<img width="954" height="906" alt="image" src="https://github.com/user-attachments/assets/a2bee971-9b3e-4a22-b1d7-15ce1136b9f8" />
 
 
 ## Features
