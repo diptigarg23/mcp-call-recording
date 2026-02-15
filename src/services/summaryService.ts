@@ -1,17 +1,16 @@
-import { ParsedTranscript, TranscriptSummary } from '../types/transcript.js';
+import { ParsedTranscript } from '../types/transcript.js';
 import { createHash } from 'crypto';
+import OpenAI from 'openai';
 
 export class SummaryService {
-  private ollamaBaseUrl: string;
-  private model: string;
+  private openai: OpenAI;
   
-  constructor(ollamaBaseUrl: string = 'http://localhost:11434', model: string = 'phi3') {
-    this.ollamaBaseUrl = ollamaBaseUrl;
-    this.model = model;
+  constructor(apiKey: string) {
+    this.openai = new OpenAI({ apiKey });
   }
   
   /**
-   * Generate a structured summary from a parsed transcript using Ollama
+   * Generate a structured summary from a parsed transcript using OpenAI
    */
   async generateSummary(transcript: ParsedTranscript): Promise<string> {
     try {
@@ -65,37 +64,33 @@ Guidelines:
 Transcript:
 ${fullTranscriptText}`;
 
-      console.error(`[SummaryService] Generating summary using Ollama (${this.model}) for transcript with ${transcript.segments.length} segments...`);
+      console.error(`[SummaryService] Generating summary using OpenAI (gpt-4-turbo) for transcript with ${transcript.segments.length} segments...`);
       
-      // Call Ollama API
-      const response = await fetch(`${this.ollamaBaseUrl}/api/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: this.model,
-          prompt: prompt,
-          stream: false,
-          options: {
-            temperature: 0.3, // Lower temperature for more consistent output
-            num_predict: 4000, // Max tokens to generate (increased for longer calls)
+      // Call OpenAI API
+      const completion = await this.openai.chat.completions.create({
+        model: "gpt-4-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert at analyzing call transcripts and creating structured summaries. Follow instructions precisely and never fabricate information."
           },
-        }),
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.3,
+        max_tokens: 4000,
       });
       
-      if (!response.ok) {
-        throw new Error(`Ollama API error: ${response.status} ${response.statusText}`);
-      }
-      
-      const data = await response.json() as { response?: string };
-      const summaryText = data.response?.trim() || '';
+      const summaryText = completion.choices[0]?.message?.content?.trim() || '';
       
       if (!summaryText) {
-        throw new Error('Ollama API returned empty summary');
+        throw new Error('OpenAI API returned empty summary');
       }
       
       console.error(`[SummaryService] Successfully generated summary (${summaryText.length} characters)`);
+      console.error(`[SummaryService] Tokens used: ${completion.usage?.total_tokens || 'unknown'}`);
       
       return summaryText;
     } catch (error) {

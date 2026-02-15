@@ -10,11 +10,14 @@ import { VectorDatabase } from './src/services/vectorDb.js';
 import { Indexer } from './src/services/indexer.js';
 
 async function reindexAll() {
-  const embeddingModel = process.env.EMBEDDING_MODEL || 'Xenova/all-MiniLM-L6-v2';
+  const openaiApiKey = process.env.OPENAI_API_KEY;
   const vttDirectory = process.env.VTT_DIRECTORY;
   const chromaDbPath = process.env.CHROMA_DB_PATH || './chroma_db';
-  const ollamaBaseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-  const ollamaModel = process.env.OLLAMA_MODEL || 'phi3';
+  
+  if (!openaiApiKey) {
+    console.error('Error: OPENAI_API_KEY environment variable is required');
+    process.exit(1);
+  }
   
   if (!vttDirectory) {
     console.error('Error: VTT_DIRECTORY environment variable is required');
@@ -22,11 +25,11 @@ async function reindexAll() {
   }
   
   console.error(`Re-indexing all files in: ${vttDirectory}`);
-  console.error(`Using Ollama at ${ollamaBaseUrl} with model ${ollamaModel}`);
+  console.error(`Using OpenAI API (gpt-4-turbo for summaries, text-embedding-3-small for embeddings)`);
   
-  // Initialize services
-  const embeddingService = new EmbeddingService(embeddingModel);
-  const summaryService = new SummaryService(ollamaBaseUrl, ollamaModel);
+  // Initialize services with OpenAI
+  const embeddingService = new EmbeddingService(openaiApiKey);
+  const summaryService = new SummaryService(openaiApiKey);
   const vectorDb = new VectorDatabase(chromaDbPath);
   
   await vectorDb.initialize();
