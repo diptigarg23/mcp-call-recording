@@ -5,6 +5,7 @@
  */
 import 'dotenv/config';
 import { EmbeddingService } from './src/services/embeddingService.js';
+import { SummaryService } from './src/services/summaryService.js';
 import { VectorDatabase } from './src/services/vectorDb.js';
 import { Indexer } from './src/services/indexer.js';
 import path from 'path';
@@ -12,15 +13,19 @@ import path from 'path';
 async function reindexFile(filePath: string) {
   const embeddingModel = process.env.EMBEDDING_MODEL || 'Xenova/all-MiniLM-L6-v2';
   const chromaDbPath = process.env.CHROMA_DB_PATH || './chroma_db';
+  const ollamaBaseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+  const ollamaModel = process.env.OLLAMA_MODEL || 'phi3';
   
   console.error(`Re-indexing file: ${filePath}`);
+  console.error(`Using Ollama at ${ollamaBaseUrl} with model ${ollamaModel}`);
   
   // Initialize services
   const embeddingService = new EmbeddingService(embeddingModel);
+  const summaryService = new SummaryService(ollamaBaseUrl, ollamaModel);
   const vectorDb = new VectorDatabase(chromaDbPath);
   
   await vectorDb.initialize();
-  const indexer = new Indexer(embeddingService, vectorDb);
+  const indexer = new Indexer(embeddingService, summaryService, vectorDb);
   
   // Force re-index the file
   try {
