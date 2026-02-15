@@ -1,0 +1,14 @@
+{
+  "name": "call-recording-mcp",
+  "description": "MCP server for semantic search over VTT transcript files",
+  "version": "1.0.0",
+  "transport": {
+    "type": "http",
+    "port": 3000
+  },
+  "environment": {
+    "OPENAI_API_KEY": "set_in_deployment_environment",
+    "VTT_DIRECTORY": "set_in_deployment_environment",
+    "CHROMA_DB_PATH": "set_in_deployment_environment"
+  }
+}

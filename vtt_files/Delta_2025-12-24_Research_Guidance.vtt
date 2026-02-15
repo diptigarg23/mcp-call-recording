@@ -1,0 +1,631 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.500
+Brian Hopkins: Good morning! Thanks for joining today's session.
+
+00:00:03.500 --> 00:00:07.200
+Brian Hopkins: I'm Brian Hopkins, VP and Principal Analyst here at Forrester.
+
+00:00:07.800 --> 00:00:11.500
+Sarah Chen: Good morning Brian. I'm Sarah Chen, VP of Digital Innovation at Delta.
+
+00:00:12.000 --> 00:00:15.800
+Sarah Chen: Really excited to discuss agentic AI with you today.
+
+00:00:16.200 --> 00:00:20.500
+Brian Hopkins: Excellent. So I understand you're exploring agentic AI implementations.
+
+00:00:21.000 --> 00:00:25.800
+Brian Hopkins: Can you give me a sense of where Delta is in this journey and what's driving the interest?
+
+00:00:26.500 --> 00:00:31.200
+Sarah Chen: Absolutely. We've been experimenting with traditional AI for customer service for a few years now.
+
+00:00:31.800 --> 00:00:36.500
+Sarah Chen: But we're seeing limitations with rule-based systems and simple chatbots.
+
+00:00:37.000 --> 00:00:42.800
+Sarah Chen: Our customers expect more dynamic, personalized experiences, especially when disruptions occur.
+
+00:00:43.500 --> 00:00:48.200
+Sarah Chen: We're looking at agentic AI to handle complex rebooking scenarios autonomously.
+
+00:00:49.000 --> 00:00:53.500
+Brian Hopkins: That makes perfect sense. The airline industry is ideal for agentic AI.
+
+00:00:54.000 --> 00:00:59.800
+Brian Hopkins: Let me start by clarifying what we mean by agentic AI versus other AI approaches.
+
+00:01:00.500 --> 00:01:06.200
+Brian Hopkins: Agentic AI systems can perceive their environment, make decisions, and take actions autonomously.
+
+00:01:06.800 --> 00:01:11.500
+Brian Hopkins: They're not just responding to prompts - they're actually pursuing goals.
+
+00:01:12.200 --> 00:01:17.800
+Sarah Chen: Right, so instead of a customer asking "can you rebook me?" and getting options...
+
+00:01:18.400 --> 00:01:23.500
+Sarah Chen: The agent would proactively identify the issue, evaluate alternatives, and execute the rebooking?
+
+00:01:24.200 --> 00:01:28.800
+Brian Hopkins: Exactly. And it does this by interacting with multiple systems.
+
+00:01:29.400 --> 00:01:34.200
+Brian Hopkins: It might check your reservation system, inventory, customer profile, weather data.
+
+00:01:34.800 --> 00:01:39.500
+Brian Hopkins: Then it reasons through the options and takes action within defined guardrails.
+
+00:01:40.200 --> 00:01:45.800
+Sarah Chen: We're particularly interested in weather-related disruptions. That's our biggest pain point.
+
+00:01:46.400 --> 00:01:51.200
+Sarah Chen: When a storm hits Atlanta, we have thousands of rebookings happening simultaneously.
+
+00:01:51.800 --> 00:01:56.500
+Sarah Chen: Our call centers get overwhelmed and customers wait hours for assistance.
+
+00:01:57.200 --> 00:02:02.800
+Brian Hopkins: This is where agentic AI really shines. Let me walk you through a framework.
+
+00:02:03.500 --> 00:02:08.200
+Brian Hopkins: First, you need to think about the agent's decision-making boundaries.
+
+00:02:08.800 --> 00:02:13.500
+Brian Hopkins: What can it do autonomously versus what requires human escalation?
+
+00:02:14.200 --> 00:02:18.800
+Sarah Chen: That's actually one of our biggest concerns - how do we set those boundaries?
+
+00:02:19.400 --> 00:02:24.200
+Sarah Chen: We don't want agents making decisions that negatively impact revenue or customer trust.
+
+00:02:24.900 --> 00:02:30.500
+Brian Hopkins: Great question. In our research, we've identified three levels of agent autonomy.
+
+00:02:31.200 --> 00:02:36.800
+Brian Hopkins: Level one is assisted autonomy - the agent recommends actions but humans approve.
+
+00:02:37.500 --> 00:02:43.200
+Brian Hopkins: Level two is conditional autonomy - agents act within strict parameters automatically.
+
+00:02:43.900 --> 00:02:49.500
+Brian Hopkins: Level three is delegated autonomy - agents handle entire workflows end-to-end.
+
+00:02:50.200 --> 00:02:54.800
+Sarah Chen: I'm thinking we'd start with level two for rebooking scenarios.
+
+00:02:55.500 --> 00:03:00.200
+Sarah Chen: Like, the agent can automatically rebook if the new flight is within 2 hours of original.
+
+00:03:00.800 --> 00:03:05.500
+Sarah Chen: And the fare class is equal or better, and the customer is not in a special status.
+
+00:03:06.200 --> 00:03:10.800
+Brian Hopkins: Perfect. You're thinking about this the right way with clear constraints.
+
+00:03:11.500 --> 00:03:16.200
+Brian Hopkins: Now, let's talk about the technical architecture you'll need to support this.
+
+00:03:16.900 --> 00:03:22.500
+Brian Hopkins: Agentic AI requires more than just a large language model - it's a complete system.
+
+00:03:23.200 --> 00:03:28.800
+Brian Hopkins: You need reasoning engines, memory systems, tool integration, and orchestration layers.
+
+00:03:29.500 --> 00:03:34.200
+Sarah Chen: We're currently using Azure OpenAI for our chatbots.
+
+00:03:34.800 --> 00:03:39.500
+Sarah Chen: Can we build agentic capabilities on top of that or do we need something different?
+
+00:03:40.200 --> 00:03:45.800
+Brian Hopkins: Azure OpenAI is a good foundation, but you'll need additional components.
+
+00:03:46.500 --> 00:03:51.200
+Brian Hopkins: Microsoft has Semantic Kernel and AutoGen frameworks for building agents.
+
+00:03:51.900 --> 00:03:57.500
+Brian Hopkins: You'll also want to look at LangGraph or similar frameworks for workflow orchestration.
+
+00:03:58.200 --> 00:04:03.800
+Brian Hopkins: The key is connecting your LLM to your operational systems - your PSS, inventory, CRM.
+
+00:04:04.500 --> 00:04:09.200
+Sarah Chen: Our reservation system is Amadeus. We also use Salesforce for customer data.
+
+00:04:09.900 --> 00:04:14.500
+Sarah Chen: How do we ensure the agent can reliably interact with these systems?
+
+00:04:15.200 --> 00:04:20.800
+Brian Hopkins: You'll need to create API wrappers that the agent can call as tools or functions.
+
+00:04:21.500 --> 00:04:26.200
+Brian Hopkins: Each tool needs clear documentation about what it does and when to use it.
+
+00:04:26.900 --> 00:04:32.500
+Brian Hopkins: The agent's reasoning engine decides which tools to call based on the customer's situation.
+
+00:04:33.200 --> 00:04:37.800
+Sarah Chen: What about hallucinations? That's a big concern for us.
+
+00:04:38.500 --> 00:04:43.200
+Sarah Chen: If an agent tells a customer they're rebooked but the system didn't actually update...
+
+00:04:43.900 --> 00:04:48.500
+Sarah Chen: That's a disaster scenario. How do we prevent that?
+
+00:04:49.200 --> 00:04:54.800
+Brian Hopkins: Critical question. This is where guardrails and validation layers are essential.
+
+00:04:55.500 --> 00:05:00.200
+Brian Hopkins: First, use function calling instead of having the agent generate API requests.
+
+00:05:00.900 --> 00:05:06.500
+Brian Hopkins: The agent declares intent to call a function, but your code makes the actual API call.
+
+00:05:07.200 --> 00:05:12.800
+Brian Hopkins: Second, always validate the response from your backend systems before confirming to customers.
+
+00:05:13.500 --> 00:05:18.200
+Brian Hopkins: Third, implement confidence scoring - if the agent isn't certain, escalate.
+
+00:05:18.900 --> 00:05:24.500
+Sarah Chen: That makes sense. What about testing? How do we validate agent behavior before going live?
+
+00:05:25.200 --> 00:05:30.800
+Brian Hopkins: Testing agentic systems is more complex than traditional software testing.
+
+00:05:31.500 --> 00:05:36.200
+Brian Hopkins: You need scenario-based testing with real customer situations and edge cases.
+
+00:05:36.900 --> 00:05:42.500
+Brian Hopkins: We recommend building a shadow mode where agents process real requests but don't execute actions.
+
+00:05:43.200 --> 00:05:47.800
+Brian Hopkins: You compare agent decisions to what human agents would do.
+
+00:05:48.500 --> 00:05:53.200
+Brian Hopkins: Once accuracy reaches your threshold, maybe 95%, you move to production.
+
+00:05:53.900 --> 00:05:58.500
+Sarah Chen: How long does that testing phase typically take for something like this?
+
+00:05:59.200 --> 00:06:04.800
+Brian Hopkins: Based on implementations we've seen, plan for 3 to 6 months minimum.
+
+00:06:05.500 --> 00:06:10.200
+Brian Hopkins: Airlines have tried to rush this and faced significant customer service issues.
+
+00:06:10.900 --> 00:06:15.500
+Brian Hopkins: Better to be methodical and build trust in the system gradually.
+
+00:06:16.200 --> 00:06:20.800
+Sarah Chen: What about explainability? If an agent makes a decision we need to understand why.
+
+00:06:21.500 --> 00:06:26.200
+Sarah Chen: Both for customer service purposes and regulatory compliance.
+
+00:06:26.900 --> 00:06:32.500
+Brian Hopkins: Absolutely essential. You need comprehensive logging of the agent's reasoning process.
+
+00:06:33.200 --> 00:06:37.800
+Brian Hopkins: Log every tool call, every decision point, every data point considered.
+
+00:06:38.500 --> 00:06:43.200
+Brian Hopkins: Modern agentic frameworks support this with reasoning traces and audit logs.
+
+00:06:43.900 --> 00:06:48.500
+Brian Hopkins: You should be able to replay any decision the agent made and see exactly why.
+
+00:06:49.200 --> 00:06:53.800
+Sarah Chen: That's reassuring. What about continuous improvement?
+
+00:06:54.500 --> 00:06:59.200
+Sarah Chen: How do we make sure the agents get better over time based on real performance?
+
+00:06:59.900 --> 00:07:05.500
+Brian Hopkins: You'll want a feedback loop with both quantitative and qualitative metrics.
+
+00:07:06.200 --> 00:07:10.800
+Brian Hopkins: Track success rates, escalation rates, customer satisfaction scores.
+
+00:07:11.500 --> 00:07:16.200
+Brian Hopkins: Also collect feedback from human agents when they take over escalated cases.
+
+00:07:16.900 --> 00:07:22.500
+Brian Hopkins: Use this data to refine your prompts, adjust guardrails, and add new capabilities.
+
+00:07:23.200 --> 00:07:27.800
+Sarah Chen: Let's talk about cost. What should we expect investment-wise?
+
+00:07:28.500 --> 00:07:33.200
+Sarah Chen: Both for initial development and ongoing operational costs?
+
+00:07:33.900 --> 00:07:39.500
+Brian Hopkins: Initial development for a focused use case like rebooking typically runs 500K to 2 million.
+
+00:07:40.200 --> 00:07:44.800
+Brian Hopkins: That includes platform setup, integration work, testing, and initial training.
+
+00:07:45.500 --> 00:07:50.200
+Brian Hopkins: Ongoing costs depend heavily on transaction volume and model usage.
+
+00:07:50.900 --> 00:07:56.500
+Brian Hopkins: For high-volume scenarios, you might spend 50 to 200K monthly on inference costs.
+
+00:07:57.200 --> 00:08:01.800
+Brian Hopkins: But compare that to call center costs - the ROI can be substantial.
+
+00:08:02.500 --> 00:08:07.200
+Sarah Chen: We handle about 50,000 disruption-related calls per month.
+
+00:08:07.900 --> 00:08:12.500
+Sarah Chen: If we can automate even 30 percent, that's significant savings.
+
+00:08:13.200 --> 00:08:17.800
+Brian Hopkins: Exactly. And customers get faster resolution, which improves satisfaction.
+
+00:08:18.500 --> 00:08:23.200
+Brian Hopkins: We're seeing airlines achieve 60 to 80 percent automation rates over time.
+
+00:08:23.900 --> 00:08:28.500
+Brian Hopkins: The key is starting narrow and expanding as you build confidence.
+
+00:08:29.200 --> 00:08:33.800
+Sarah Chen: What other use cases beyond rebooking should we be thinking about?
+
+00:08:34.500 --> 00:08:39.200
+Brian Hopkins: Great question. Let me share what we're seeing work well in airlines.
+
+00:08:39.900 --> 00:08:45.500
+Brian Hopkins: Baggage claim resolution - agents can track bags, file claims, arrange delivery autonomously.
+
+00:08:46.200 --> 00:08:50.800
+Brian Hopkins: Upgrade management - dynamically offering upgrades based on inventory and customer value.
+
+00:08:51.500 --> 00:08:56.200
+Brian Hopkins: Schedule change notifications - proactively reaching out with alternatives.
+
+00:08:56.900 --> 00:09:02.500
+Brian Hopkins: And ancillary sales - intelligently recommending seat selections, bags, priority boarding.
+
+00:09:03.200 --> 00:09:07.800
+Sarah Chen: The ancillary sales angle is interesting. That could drive revenue, not just save costs.
+
+00:09:08.500 --> 00:09:13.200
+Brian Hopkins: Absolutely. Agentic AI isn't just about efficiency - it's about better experiences.
+
+00:09:13.900 --> 00:09:18.500
+Brian Hopkins: When agents understand customer context, they can make smarter recommendations.
+
+00:09:19.200 --> 00:09:23.800
+Sarah Chen: What about the organizational side? What team structure do we need?
+
+00:09:24.500 --> 00:09:29.200
+Brian Hopkins: You'll need a cross-functional team - this isn't just an IT project.
+
+00:09:29.900 --> 00:09:35.500
+Brian Hopkins: Product managers to define agent behaviors, data scientists for model work, engineers for integration.
+
+00:09:36.200 --> 00:09:40.800
+Brian Hopkins: But critically, you need domain experts from your operations teams.
+
+00:09:41.500 --> 00:09:46.200
+Brian Hopkins: They understand the nuances of rebooking policies and customer needs.
+
+00:09:46.900 --> 00:09:52.500
+Sarah Chen: Should we have a dedicated AI ethics or governance person on the team?
+
+00:09:53.200 --> 00:09:58.800
+Brian Hopkins: Yes, especially for customer-facing agents. You need someone thinking about risks.
+
+00:09:59.500 --> 00:10:04.200
+Brian Hopkins: Bias in decision-making, privacy concerns, accessibility for all customers.
+
+00:10:04.900 --> 00:10:10.500
+Brian Hopkins: Major airlines are creating AI governance boards for exactly this reason.
+
+00:10:11.200 --> 00:10:15.800
+Sarah Chen: How do we handle the change management with our existing call center staff?
+
+00:10:16.500 --> 00:10:21.200
+Sarah Chen: They might see this as a threat to their jobs.
+
+00:10:21.900 --> 00:10:27.500
+Brian Hopkins: This is critical and often underestimated. The narrative needs to be about augmentation.
+
+00:10:28.200 --> 00:10:32.800
+Brian Hopkins: Agents should handle the routine cases so humans can focus on complex situations.
+
+00:10:33.500 --> 00:10:38.200
+Brian Hopkins: And situations requiring empathy and judgment that AI can't replicate.
+
+00:10:38.900 --> 00:10:44.500
+Brian Hopkins: Position your call center staff as supervisors and trainers for the AI agents.
+
+00:10:45.200 --> 00:10:49.800
+Brian Hopkins: Their expertise becomes even more valuable, not less.
+
+00:10:50.500 --> 00:10:55.200
+Sarah Chen: That's a helpful framing. What about integration with our existing customer service platform?
+
+00:10:55.900 --> 00:11:00.500
+Sarah Chen: We use a mix of phone, chat, mobile app, and social media channels.
+
+00:11:01.200 --> 00:11:06.800
+Brian Hopkins: Your agentic system should be channel-agnostic at the core.
+
+00:11:07.500 --> 00:11:12.200
+Brian Hopkins: Build the reasoning and decision-making logic once, then expose it across channels.
+
+00:11:12.900 --> 00:11:18.500
+Brian Hopkins: You might have channel-specific interfaces, but the agent's brain is centralized.
+
+00:11:19.200 --> 00:11:23.800
+Brian Hopkins: This ensures consistent decisions regardless of how customers reach you.
+
+00:11:24.500 --> 00:11:29.200
+Sarah Chen: Makes sense. What about personalization? How do agents learn customer preferences?
+
+00:11:29.900 --> 00:11:35.500
+Brian Hopkins: This is where memory systems come in - both short-term and long-term memory.
+
+00:11:36.200 --> 00:11:40.800
+Brian Hopkins: Short-term memory is the current conversation context.
+
+00:11:41.500 --> 00:11:46.200
+Brian Hopkins: Long-term memory pulls from customer profiles, past interactions, preferences.
+
+00:11:46.900 --> 00:11:52.500
+Brian Hopkins: The agent should know if someone always books aisle seats or prefers morning flights.
+
+00:11:53.200 --> 00:11:57.800
+Brian Hopkins: And use that context to make more personalized decisions.
+
+00:11:58.500 --> 00:12:03.200
+Sarah Chen: Privacy concerns there though - how much data should agents access?
+
+00:12:03.900 --> 00:12:09.500
+Brian Hopkins: Exactly right to flag that. This ties back to governance and compliance.
+
+00:12:10.200 --> 00:12:14.800
+Brian Hopkins: You need clear data access policies - only what's needed for the task.
+
+00:12:15.500 --> 00:12:20.200
+Brian Hopkins: And full transparency with customers about what data is being used.
+
+00:12:20.900 --> 00:12:26.500
+Brian Hopkins: GDPR and similar regulations require you to explain automated decision-making.
+
+00:12:27.200 --> 00:12:31.800
+Sarah Chen: What about multi-agent systems? Should we think about multiple specialized agents?
+
+00:12:32.500 --> 00:12:37.200
+Sarah Chen: Like one for rebooking, one for baggage, one for loyalty program questions?
+
+00:12:37.900 --> 00:12:43.500
+Brian Hopkins: That's an advanced pattern we're seeing emerge. Multi-agent orchestration.
+
+00:12:44.200 --> 00:12:48.800
+Brian Hopkins: You have specialist agents for different domains, coordinated by a supervisor agent.
+
+00:12:49.500 --> 00:12:54.200
+Brian Hopkins: The supervisor routes requests and synthesizes responses from specialists.
+
+00:12:54.900 --> 00:13:00.500
+Brian Hopkins: This can work well but adds complexity - I'd start with a single generalist agent.
+
+00:13:01.200 --> 00:13:05.800
+Brian Hopkins: Add specialists later as you identify clear domains of expertise.
+
+00:13:06.500 --> 00:13:11.200
+Sarah Chen: What are the biggest mistakes you see companies make with agentic AI?
+
+00:13:11.900 --> 00:13:17.500
+Brian Hopkins: Number one is trying to boil the ocean - tackling too many use cases at once.
+
+00:13:18.200 --> 00:13:22.800
+Brian Hopkins: Start with one high-value, well-defined scenario and nail it.
+
+00:13:23.500 --> 00:13:28.200
+Brian Hopkins: Number two is underestimating integration complexity with legacy systems.
+
+00:13:28.900 --> 00:13:34.500
+Brian Hopkins: Number three is inadequate testing - you need to test edge cases exhaustively.
+
+00:13:35.200 --> 00:13:39.800
+Brian Hopkins: And number four is ignoring the human element and change management.
+
+00:13:40.500 --> 00:13:45.200
+Sarah Chen: Those are helpful guardrails. What about vendor selection?
+
+00:13:45.900 --> 00:13:50.500
+Sarah Chen: Should we build this ourselves or work with a specialized vendor?
+
+00:13:51.200 --> 00:13:56.800
+Brian Hopkins: It depends on your technical capabilities and speed requirements.
+
+00:13:57.500 --> 00:14:02.200
+Brian Hopkins: Building yourself gives you more control and customization.
+
+00:14:02.900 --> 00:14:08.500
+Brian Hopkins: But vendors like Salesforce, Microsoft, and specialized AI companies have pre-built frameworks.
+
+00:14:09.200 --> 00:14:13.800
+Brian Hopkins: They can accelerate time-to-value significantly.
+
+00:14:14.500 --> 00:14:19.200
+Brian Hopkins: I'd recommend a hybrid approach - use vendor platforms but customize heavily.
+
+00:14:19.900 --> 00:14:24.500
+Sarah Chen: What should we look for in evaluating vendors or platforms?
+
+00:14:25.200 --> 00:14:30.800
+Brian Hopkins: First, integration capabilities with your existing tech stack.
+
+00:14:31.500 --> 00:14:36.200
+Brian Hopkins: Second, explainability and observability features for debugging and compliance.
+
+00:14:36.900 --> 00:14:42.500
+Brian Hopkins: Third, flexibility to customize agent behaviors and workflows.
+
+00:14:43.200 --> 00:14:47.800
+Brian Hopkins: And fourth, their experience in your industry - airline experience matters.
+
+00:14:48.500 --> 00:14:53.200
+Sarah Chen: Are there any airlines that are ahead of the curve we could learn from?
+
+00:14:53.900 --> 00:14:59.500
+Brian Hopkins: Several are experimenting but most are still in pilot phases.
+
+00:15:00.200 --> 00:15:04.800
+Brian Hopkins: Without naming specific names, we're seeing European and Asian carriers move faster.
+
+00:15:05.500 --> 00:15:10.200
+Brian Hopkins: But no one has really cracked this at scale yet - it's still early days.
+
+00:15:10.900 --> 00:15:15.500
+Brian Hopkins: This is an opportunity for Delta to be a leader if you execute well.
+
+00:15:16.200 --> 00:15:20.800
+Sarah Chen: What timeline should we be thinking about for meaningful impact?
+
+00:15:21.500 --> 00:15:26.200
+Brian Hopkins: If you start today, plan for 12 to 18 months to production deployment.
+
+00:15:26.900 --> 00:15:32.500
+Brian Hopkins: That includes 3 months for architecture and design, 6 months for build and integration.
+
+00:15:33.200 --> 00:15:37.800
+Brian Hopkins: Then 3 to 6 months for testing and shadow mode.
+
+00:15:38.500 --> 00:15:43.200
+Brian Hopkins: After launch, expect another 6 months of optimization before hitting stride.
+
+00:15:43.900 --> 00:15:48.500
+Sarah Chen: So we're looking at two years to fully mature capability.
+
+00:15:49.200 --> 00:15:54.800
+Brian Hopkins: Yes, but you'll see incremental value throughout that journey.
+
+00:15:55.500 --> 00:16:00.200
+Brian Hopkins: Don't think of it as all or nothing - you can launch limited scenarios earlier.
+
+00:16:00.900 --> 00:16:06.500
+Sarah Chen: What metrics should we track to measure success?
+
+00:16:07.200 --> 00:16:12.800
+Brian Hopkins: Start with operational metrics - automation rate, average handle time, first contact resolution.
+
+00:16:13.500 --> 00:16:18.200
+Brian Hopkins: Then customer metrics - satisfaction scores, net promoter score, complaint rates.
+
+00:16:18.900 --> 00:16:24.500
+Brian Hopkins: Financial metrics - cost per interaction, revenue impact from upsells.
+
+00:16:25.200 --> 00:16:29.800
+Brian Hopkins: And AI-specific metrics - accuracy, hallucination rate, escalation reasons.
+
+00:16:30.500 --> 00:16:35.200
+Sarah Chen: This has been incredibly helpful Brian. A few final questions.
+
+00:16:35.900 --> 00:16:40.500
+Sarah Chen: What about regulatory considerations? Any specific concerns for airlines?
+
+00:16:41.200 --> 00:16:46.800
+Brian Hopkins: Airlines face unique regulatory scrutiny around customer service commitments.
+
+00:16:47.500 --> 00:16:52.200
+Brian Hopkins: DOT regulations around refunds, rebooking rights, compensation.
+
+00:16:52.900 --> 00:16:58.500
+Brian Hopkins: Your agents must be programmed to comply with these regulations perfectly.
+
+00:16:59.200 --> 00:17:03.800
+Brian Hopkins: Build in checks and validations - this is non-negotiable.
+
+00:17:04.500 --> 00:17:09.200
+Brian Hopkins: I'd also recommend legal review of agent behaviors before deployment.
+
+00:17:09.900 --> 00:17:14.500
+Sarah Chen: And what about security? These agents will have access to sensitive systems.
+
+00:17:15.200 --> 00:17:20.800
+Brian Hopkins: Critical concern. Think of agents as privileged users requiring strict access controls.
+
+00:17:21.500 --> 00:17:26.200
+Brian Hopkins: Use service accounts with minimal necessary permissions.
+
+00:17:26.900 --> 00:17:32.500
+Brian Hopkins: Implement rate limiting to prevent abuse. Monitor for unusual patterns.
+
+00:17:33.200 --> 00:17:37.800
+Brian Hopkins: And consider prompt injection attacks - malicious users trying to manipulate agents.
+
+00:17:38.500 --> 00:17:43.200
+Brian Hopkins: You need input validation and output filtering as security layers.
+
+00:17:43.900 --> 00:17:48.500
+Sarah Chen: Wow, there's a lot to think about. This is really helpful context.
+
+00:17:49.200 --> 00:17:53.800
+Brian Hopkins: Happy to help. I think Delta is approaching this thoughtfully.
+
+00:17:54.500 --> 00:17:59.200
+Brian Hopkins: The fact that you're asking these questions now, before rushing in, is a great sign.
+
+00:17:59.900 --> 00:18:04.500
+Sarah Chen: What resources would you recommend we dig into next?
+
+00:18:05.200 --> 00:18:10.800
+Brian Hopkins: I'll send you our latest report on enterprise agentic AI implementation patterns.
+
+00:18:11.500 --> 00:18:16.200
+Brian Hopkins: We also have case studies from travel and hospitality companies.
+
+00:18:16.900 --> 00:18:22.500
+Brian Hopkins: And I'd recommend looking at academic research from Stanford and MIT on agent reliability.
+
+00:18:23.200 --> 00:18:27.800
+Brian Hopkins: I can also connect you with a few vendors who specialize in this space.
+
+00:18:28.500 --> 00:18:33.200
+Sarah Chen: That would be great. Can we schedule a follow-up in a few months?
+
+00:18:33.900 --> 00:18:38.500
+Sarah Chen: Once we've had a chance to digest this and start our planning?
+
+00:18:39.200 --> 00:18:44.800
+Brian Hopkins: Absolutely. I'd love to hear how your thinking evolves.
+
+00:18:45.500 --> 00:18:50.200
+Brian Hopkins: And if you hit any roadblocks or technical questions, feel free to reach out.
+
+00:18:50.900 --> 00:18:55.500
+Sarah Chen: Perfect. This has given us a great foundation to move forward.
+
+00:18:56.200 --> 00:19:00.800
+Sarah Chen: I'm excited about the possibilities but also more realistic about the complexity.
+
+00:19:01.500 --> 00:19:06.200
+Brian Hopkins: That's exactly the right mindset. Optimistic but grounded.
+
+00:19:06.900 --> 00:19:12.500
+Brian Hopkins: Agentic AI will transform customer service, but it takes careful implementation.
+
+00:19:13.200 --> 00:19:17.800
+Sarah Chen: Thanks so much Brian. Really appreciate your time and expertise.
+
+00:19:18.500 --> 00:19:23.200
+Brian Hopkins: My pleasure Sarah. Good luck with your initiative.
+
+00:19:23.900 --> 00:19:28.500
+Brian Hopkins: Looking forward to seeing Delta lead the way in agentic customer service.
+
+00:19:29.200 --> 00:19:31.500
+Sarah Chen: Thanks! Talk soon.
+
+00:19:32.000 --> 00:19:34.000
+Brian Hopkins: Take care.

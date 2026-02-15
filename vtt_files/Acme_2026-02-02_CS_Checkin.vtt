@@ -1,0 +1,235 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.000
+JORDAN LEE: Good morning, Maya! Thanks for taking the time today. I know you're busy, so I'll keep this focused.
+
+00:00:05.000 --> 00:00:10.000
+I wanted to show you how Forrester's AI Assistant can help you and your team get answers from our research much faster.
+
+00:00:10.000 --> 00:00:15.000
+MAYA PATEL: Morning, Jordan. Yes, I'm definitely interested. We're paying for Forrester, but honestly, my team tells me they find it hard to navigate.
+
+00:00:15.000 --> 00:00:20.000
+They say there's great content, but finding the right report takes too long.
+
+00:00:20.000 --> 00:00:25.000
+JORDAN LEE: That's the most common feedback we hear, and it's exactly why we built the AI Assistant.
+
+00:00:25.000 --> 00:00:30.000
+So instead of your team searching for documents and reading through multiple reports, they can now just ask their question directly
+
+00:00:30.000 --> 00:00:35.000
+and get a synthesized answer with citations. Let me show you what I mean.
+
+00:00:35.000 --> 00:00:38.000
+MAYA PATEL: Okay, I'm curious how this actually works.
+
+00:00:38.000 --> 00:00:42.000
+JORDAN LEE: Perfect. I'm sharing my screen now. Can you see the Forrester platform?
+
+00:00:42.000 --> 00:00:45.000
+MAYA PATEL: Yes, I've got it.
+
+00:00:45.000 --> 00:00:50.000
+JORDAN LEE: Great. So this is the AI Assistant interface - see this search bar at the top?
+
+00:00:50.000 --> 00:00:55.000
+I'm going to ask a question that's relevant to your digital strategy work.
+
+00:00:55.000 --> 00:01:00.000
+Let me type: "What are the key trends in digital customer experience for 2026?"
+
+00:01:00.000 --> 00:01:05.000
+I'm hitting enter now... and you'll see it takes about five to ten seconds to analyze all the relevant research
+
+00:01:05.000 --> 00:01:10.000
+and generate a response. Here we go.
+
+00:01:10.000 --> 00:01:15.000
+Okay, look at this response. The AI has identified four major trends:
+
+00:01:15.000 --> 00:01:20.000
+AI-powered personalization at scale, conversational commerce, privacy-first experience design, and omnichannel orchestration.
+
+00:01:20.000 --> 00:01:25.000
+But notice - it's not just listing trends. For each one, it's explaining what it means, why it matters,
+
+00:01:25.000 --> 00:01:30.000
+and how companies are implementing it. And see these citations throughout?
+
+00:01:30.000 --> 00:01:35.000
+Every claim links back to the specific Forrester report and even the specific section where that information comes from.
+
+00:01:35.000 --> 00:01:40.000
+MAYA PATEL: So it's actually reading the reports and synthesizing information across multiple sources?
+
+00:01:40.000 --> 00:01:45.000
+JORDAN LEE: Exactly right. This answer is pulling from six different Forrester reports - you can see them listed at the bottom.
+
+00:01:45.000 --> 00:01:50.000
+The AI understands the content, identifies patterns across our research, and synthesizes it into a coherent answer.
+
+00:01:50.000 --> 00:01:55.000
+If I click on this citation here... see? It takes you directly to that paragraph in the original report.
+
+00:01:55.000 --> 00:02:00.000
+You're not starting at page one of a forty-page document.
+
+00:02:00.000 --> 00:02:05.000
+MAYA PATEL: That's really helpful. So what about follow-up questions? Like, what if I want to dig deeper on one of these trends?
+
+00:02:05.000 --> 00:02:10.000
+JORDAN LEE: Great question. The AI is conversational, so you can ask follow-ups and it maintains context.
+
+00:02:10.000 --> 00:02:15.000
+Watch this - I'm going to ask: "Tell me more about AI-powered personalization. What are the specific use cases?"
+
+00:02:15.000 --> 00:02:20.000
+See how it understood that I'm asking about the first trend from the previous answer?
+
+00:02:20.000 --> 00:02:25.000
+It's now giving me specific use cases: predictive product recommendations, dynamic content adaptation,
+
+00:02:25.000 --> 00:02:30.000
+behavioral trigger automation, and personalized pricing strategies. Each with examples and citations.
+
+00:02:30.000 --> 00:02:35.000
+This is the power of conversational research - you can drill down naturally without starting over each time.
+
+00:02:35.000 --> 00:02:40.000
+MAYA PATEL: Okay, this is actually impressive. But I need to ask about accuracy.
+
+00:02:40.000 --> 00:02:45.000
+How do I know the AI isn't making things up or misinterpreting the research?
+
+00:02:45.000 --> 00:02:50.000
+JORDAN LEE: Critical question, and we've been obsessive about this. First, the AI only uses actual Forrester research -
+
+00:02:50.000 --> 00:02:55.000
+it's not trained on the general internet. It can only answer based on content we've published.
+
+00:02:55.000 --> 00:03:00.000
+Second, every substantive claim has a citation that you can verify immediately.
+
+00:03:00.000 --> 00:03:05.000
+Third, if you ask something outside Forrester's coverage area, the AI explicitly tells you
+
+00:03:05.000 --> 00:03:10.000
+"We don't have research on this topic" rather than trying to fake an answer.
+
+00:03:10.000 --> 00:03:15.000
+MAYA PATEL: What happens if there's conflicting information in different reports?
+
+00:03:15.000 --> 00:03:20.000
+JORDAN LEE: Another great question. The AI is trained to recognize disagreement or different perspectives.
+
+00:03:20.000 --> 00:03:25.000
+Let me show you. I'll ask: "What's the best pricing model for SaaS products?"
+
+00:03:25.000 --> 00:03:30.000
+Look at how it handles this. It says "Forrester research identifies multiple pricing approaches, each suited to different contexts."
+
+00:03:30.000 --> 00:03:35.000
+Then it lays out usage-based pricing, tiered subscription, value-based pricing, and freemium models -
+
+00:03:35.000 --> 00:03:40.000
+explaining the advantages and tradeoffs of each with citations. It's not giving you a false sense of certainty
+
+00:03:40.000 --> 00:03:45.000
+when there isn't one clear answer. Instead, it's helping you understand the decision landscape.
+
+00:03:45.000 --> 00:03:50.000
+MAYA PATEL: I appreciate that nuance. That actually makes me trust it more.
+
+00:03:50.000 --> 00:03:55.000
+JORDAN LEE: That's exactly the reaction we want. The AI is designed to make you more informed, not to make decisions for you.
+
+00:03:55.000 --> 00:04:00.000
+Now, let me show you one more thing that your team will love - comparative analysis.
+
+00:04:00.000 --> 00:04:05.000
+I'll ask: "Compare the leading marketing automation platforms for mid-market B2B companies."
+
+00:04:05.000 --> 00:04:10.000
+The AI automatically formats this as a comparison table because it understood the question type.
+
+00:04:10.000 --> 00:04:15.000
+You're seeing the major players, their strengths, weaknesses, and ideal customer profiles -
+
+00:04:15.000 --> 00:04:20.000
+all linked to our Wave evaluations and vendor assessments. This kind of analysis would normally take someone
+
+00:04:20.000 --> 00:04:25.000
+hours to compile manually, and now it's done in seconds.
+
+00:04:25.000 --> 00:04:28.000
+MAYA PATEL: This would save my team so much time. How do we actually get access to this?
+
+00:04:28.000 --> 00:04:33.000
+JORDAN LEE: It's an add-on to your existing Forrester subscription. For your organization size,
+
+00:04:33.000 --> 00:04:38.000
+we're looking at about forty-five thousand annually, which gives all your users unlimited access.
+
+00:04:38.000 --> 00:04:43.000
+When you break down the ROI - if each person saves even just three hours a month,
+
+00:04:43.000 --> 00:04:48.000
+you're looking at a ten-to-one return on that investment.
+
+00:04:48.000 --> 00:04:52.000
+MAYA PATEL: That math makes sense. What's the implementation process like?
+
+00:04:52.000 --> 00:04:57.000
+JORDAN LEE: Super straightforward. Once you sign the agreement, we activate it within three to five business days.
+
+00:04:57.000 --> 00:05:02.000
+All your existing users will see the AI Assistant the next time they log in - no separate login, no new system to learn.
+
+00:05:02.000 --> 00:05:07.000
+We provide training resources and I'd schedule a live session with your team to show them best practices.
+
+00:05:07.000 --> 00:05:12.000
+You could have everyone up and running within two weeks.
+
+00:05:12.000 --> 00:05:15.000
+MAYA PATEL: And there's support if we have questions or issues?
+
+00:05:15.000 --> 00:05:20.000
+JORDAN LEE: Absolutely. You'll still have me as your customer success manager, plus our support team is available via email and chat.
+
+00:05:20.000 --> 00:05:25.000
+Average response time is under two hours for any issues. We also have an AI Assistant user community
+
+00:05:25.000 --> 00:05:30.000
+where people share tips and use cases.
+
+00:05:30.000 --> 00:05:33.000
+MAYA PATEL: Okay, I'm definitely interested. What are the next steps?
+
+00:05:33.000 --> 00:05:38.000
+JORDAN LEE: I'll send you a detailed proposal today with pricing, implementation timeline, and some case studies
+
+00:05:38.000 --> 00:05:43.000
+from similar companies. I can also set up a demo for your broader team if you want others to see this in action
+
+00:05:43.000 --> 00:05:48.000
+before making the decision. Does that work?
+
+00:05:48.000 --> 00:05:53.000
+MAYA PATEL: Yes, that sounds perfect. Let me review the proposal, and I'll probably want to show this to my VP
+
+00:05:53.000 --> 00:05:58.000
+and a few of my team leads. Can we schedule that broader demo for next week?
+
+00:05:58.000 --> 00:06:03.000
+JORDAN LEE: Absolutely. I'll send some time options in my follow-up email. And Maya, if any questions come up
+
+00:06:03.000 --> 00:06:08.000
+as you're reviewing, just reach out directly. I'm here to help.
+
+00:06:08.000 --> 00:06:11.000
+MAYA PATEL: Great, thanks Jordan. This was really helpful.
+
+00:06:11.000 --> 00:06:14.000
+JORDAN LEE: My pleasure. Talk soon!
