@@ -9,15 +9,12 @@
 
 ## 1. Executive Summary
 
-An AI-powered MCP server that enables business stakeholders to extract insights from client call transcripts using natural language queries. **Now powered by OpenAI GPT-4-turbo** for production-grade quality.
+An AI-powered MCP server that enables business stakeholders to extract insights from client call transcripts using natural language queries. 
 
 **Key Value Props**:
 - 🔍 Natural language search over call transcripts
-- 📊 Perfect structured summaries with action items & decisions (100% consistency)
 - 🎯 All participants captured (no more missing attendees)
-- 🚫 Zero hallucinations (correctly shows "Unknown" for missing data)
 - ⚡ Automatic indexing on file addition
-- 💰 Low cost (~$0.02 per transcript)
 
 ---
 
