@@ -28,10 +28,8 @@ An AI-powered MCP server that enables business stakeholders to extract insights 
 5. **Missing Participants**: Local models often miss attendees in multi-person calls
 
 ### Target Users
-- **Primary**: Account Managers, Customer Success Managers, Sales Teams
+- **Primary**: Research Team, Customer Success Managers, Sales Teams
 - **Secondary**: Product Managers, Support Leads, Executives
-- **Company Size**: 10-1000 employees with regular client calls
-- **Willingness to Pay**: $5-20/month for quality AI-powered insights
 
 ---
 
@@ -39,7 +37,6 @@ An AI-powered MCP server that enables business stakeholders to extract insights 
 
 ### Business Goals
 - Enable instant recall of call insights
-- Reduce call review time by 80%
 - Improve follow-up action completion by 40%
 
 ### Success Metrics
